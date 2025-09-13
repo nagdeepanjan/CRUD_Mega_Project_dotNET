@@ -9,7 +9,9 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        arch: [linux-x64, linux-arm64]
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -23,7 +25,7 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build --no-restore --configuration Release --runtime ${{ matrix.arch }}
 
     - name: Test
       run: dotnet test --no-build --configuration Release --verbosity normal
