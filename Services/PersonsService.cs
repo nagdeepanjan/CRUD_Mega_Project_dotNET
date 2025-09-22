@@ -1,6 +1,7 @@
 ﻿using Entities;
 using ServiceContracts;
 using ServiceContracts.DTO;
+using Services.Helpers;
 
 namespace Services
 {
@@ -21,9 +22,11 @@ namespace Services
             if (personAddRequest is null)
                 throw new ArgumentNullException(nameof(personAddRequest));
 
-            //check PersonName
-            if (string.IsNullOrEmpty(personAddRequest.PersonName))
-                throw new ArgumentException(nameof(personAddRequest));
+            //check PersonName (this is more validations are now being done with model validations)
+            //if (string.IsNullOrEmpty(personAddRequest.PersonName))
+            //    throw new ArgumentException(nameof(personAddRequest));
+
+            ValidationHelper.ModelValidation(personAddRequest);
 
             //convert personAddRequest to Person type
             Person person = personAddRequest.ToPerson();

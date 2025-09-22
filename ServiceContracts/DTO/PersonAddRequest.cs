@@ -1,5 +1,6 @@
 ﻿using Entities;
 using ServiceContracts.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace ServiceContracts.DTO
 {
@@ -8,8 +9,12 @@ namespace ServiceContracts.DTO
     /// </summary>
     public class PersonAddRequest
     {
+        [Required(ErrorMessage = "Person Name cannot be blank")]
         public string? PersonName { get; set; }
+        [Required(ErrorMessage = "Email cannot be blank")]
+        [EmailAddress(ErrorMessage = "Email is invalid")]
         public string? Email { get; set; }
+
         public DateTime? DateOfBirth { get; set; }
         public GenderOptions? Gender { get; set; }
         public string? Address { get; set; }
