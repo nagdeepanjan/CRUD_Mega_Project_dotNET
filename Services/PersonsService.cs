@@ -42,7 +42,17 @@ namespace Services
 
         public List<PersonResponse> GetAllPersons()
         {
-            throw new NotImplementedException();
+            return _persons.Select(p => p.ToPersonResponse()).ToList();
+        }
+
+        public PersonResponse? GetPersonByPersonID(Guid? personID)
+        {
+            if (personID == null) return null;
+
+            Person? person = _persons.FirstOrDefault(p => p.PersonID == personID);
+            if (person == null) return null;
+
+            return person.ToPersonResponse();
         }
 
         private PersonResponse ConvertPersonToPersonResponse(Person person)
