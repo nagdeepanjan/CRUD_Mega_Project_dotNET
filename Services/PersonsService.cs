@@ -91,6 +91,9 @@ namespace Services
                 case nameof(Person.Address):
                     matchingPersons = allPersons.Where(p => string.IsNullOrEmpty(p.Address) ? true : p.Address.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
                     break;
+                default:
+                    matchingPersons = allPersons;
+                    break;
             }
 
             return matchingPersons;
