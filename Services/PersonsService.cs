@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices.Marshalling;
 using Entities;
 using ServiceContracts;
 using ServiceContracts.DTO;
@@ -159,7 +160,29 @@ namespace Services
 
         public PersonResponse UpdatePerson(PersonUpdateRequest? personUpdateRequest)
         {
-            
+            // Validate input
+            if (personUpdateRequest is null)
+                throw new ArgumentNullException(nameof(personUpdateRequest));
+
+            ValidationHelper.ModelValidation(personUpdateRequest);
+
+            // Find the person to update
+            Person? existingPerson = _persons.FirstOrDefault(p => p.PersonID == personUpdateRequest.PersonID);
+            if (existingPerson is null)
+                throw new ArgumentException("Person with the given ID does not exist.", nameof(personUpdateRequest));
+
+            // Update properties
+            existingPerson.PersonName = personUpdateRequest.PersonName;
+            existingPerson.Email = personUpdateRequest.Email;
+            existingPerson.DateOfBirth = personUpdateRequest.DateOfBirth;
+            existingPerson.Gender = personUpdateRequest.Gender?.ToString();
+            existingPerson.Address = personUpdateRequest.Address;
+            existingPerson.ReceiveNewsLetters = personUpdateRequest.ReceiveNewsLetters;
+            existingPerson.CountryID = personUpdateRequest.CountryID;
+
+            // Return updated response
+            //return ConvertPersonToPersonResponse(existingPerson);
+            return existingPerson.ToPersonResponse();
         }
     }
 }

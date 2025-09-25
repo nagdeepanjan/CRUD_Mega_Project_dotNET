@@ -41,7 +41,7 @@ namespace CRUD_Tests
             // Arrange
             PersonAddRequest personAddRequest = new PersonAddRequest()
             {
-                PersonName = null
+                PersonName = null, Email = "alpha@deepz.com", Gender = GenderOptions.Female
             };
 
             // Act & Assert
@@ -521,7 +521,7 @@ namespace CRUD_Tests
 
 
             PersonAddRequest person_add_request = new PersonAddRequest
-                { PersonName = "Mintu", CountryID = country_response_from_add.CountryID };
+                { PersonName = "Aloha", CountryID = country_response_from_add.CountryID, Email = "mindy@yahoo.com", Gender = GenderOptions.Other};
             PersonResponse person_response_from_add=_personsService.AddPerson(person_add_request);
 
             PersonUpdateRequest person_update_request = person_response_from_add.ToPersonUpdateRequest();
