@@ -1,4 +1,5 @@
 ﻿using Entities;
+using ServiceContracts.Enums;
 
 namespace ServiceContracts.DTO
 {
@@ -18,10 +19,6 @@ namespace ServiceContracts.DTO
 
         public Guid? CountryID { get; set; }
         public string? Country { get; set; }
-
-
-
-
 
 
         /// <summary>
@@ -59,7 +56,20 @@ namespace ServiceContracts.DTO
             return $"PersonID: {PersonID}, PersonName: {PersonName}, Email: {Email}, DateOfBirth: {DateOfBirth?.ToString()}, Gender: {Gender}, Address: {Address}, ReceiveNewsLetters: {ReceiveNewsLetters}, Age: {Age}, CountryID: {CountryID}";
         }
 
-
+        public PersonUpdateRequest ToPersonUpdateRequest()
+        {
+            return new PersonUpdateRequest
+            {
+                PersonID = PersonID,
+                PersonName = PersonName,
+                Email = Email,
+                Address = Address,
+                CountryID = CountryID,
+                DateOfBirth = DateOfBirth,
+                Gender = (GenderOptions)Enum.Parse(typeof(GenderOptions), Gender, true),
+                ReceiveNewsLetters = ReceiveNewsLetters
+            };
+        }
 
     }
     /// <summary>
@@ -85,6 +95,8 @@ namespace ServiceContracts.DTO
                     : null
             };
         }
+
+        
     }
 
 }
