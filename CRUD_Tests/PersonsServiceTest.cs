@@ -228,6 +228,7 @@ namespace CRUD_Tests
         [Fact]
         public void GetFilteredPersons_EmptySearchText()
         {
+            //Arrange
             CountryAddRequest country_request_1 = new CountryAddRequest { CountryName = "Japan" };
             CountryAddRequest country_request_2 = new CountryAddRequest { CountryName = "China" };
 
@@ -390,6 +391,92 @@ namespace CRUD_Tests
 
 
 
+        }
+        #endregion
+
+
+        #region GetSortedPersons
+
+        //When we sort based on PersonName in DESC, it should return person list in descending on PersonName
+        [Fact]
+        public void GetSortedPersons()
+        {
+            //Arrange
+            CountryAddRequest country_request_1 = new CountryAddRequest { CountryName = "Japan" };
+            CountryAddRequest country_request_2 = new CountryAddRequest { CountryName = "China" };
+
+            CountryResponse country_response_1 = _countriesService.AddCountry(country_request_1);
+            CountryResponse country_response_2 = _countriesService.AddCountry(country_request_2);
+
+            PersonAddRequest person_request_1 = new PersonAddRequest
+            {
+                PersonName = "Mary",
+                Email = "sakura@japan.com",
+                DateOfBirth = new DateTime(1985, 3, 21),
+                Gender = GenderOptions.Female,
+                Address = "Tokyo",
+                ReceiveNewsLetters = true,
+                CountryID = country_response_1.CountryID
+            };
+
+            PersonAddRequest person_request_2 = new PersonAddRequest
+            {
+                PersonName = "Rahman",
+                Email = "li@china.com",
+                DateOfBirth = new DateTime(1990, 5, 15),
+                Gender = GenderOptions.Male,
+                Address = "Beijing",
+                ReceiveNewsLetters = false,
+                CountryID = country_response_2.CountryID
+            };
+
+            PersonAddRequest person_request_3 = new PersonAddRequest
+            {
+                PersonName = "Manu",
+                Email = "sakura@japan.com",
+                DateOfBirth = new DateTime(1988, 3, 8),
+                Gender = GenderOptions.Male,
+                Address = "Djakarta",
+                ReceiveNewsLetters = true,
+                CountryID = country_response_1.CountryID
+            };
+
+            List<PersonAddRequest> person_requests = new List<PersonAddRequest> { person_request_1, person_request_2, person_request_3 };
+
+            List<PersonResponse> person_response_list_from_add = new List<PersonResponse>();
+
+            foreach (PersonAddRequest person_request in person_requests)
+            {
+                PersonResponse person_response = _personsService.AddPerson(person_request);
+                person_response_list_from_add.Add(person_response);
+            }
+
+            //print person_response_list_from_add
+            _testOutputHelper.WriteLine("Expected:");
+            foreach (PersonResponse person_response_from_add in person_response_list_from_add)
+            {
+                _testOutputHelper.WriteLine(person_response_from_add.ToString());
+            }
+
+            List<PersonResponse> allPersons = _personsService.GetAllPersons();
+            //Act
+            List<PersonResponse> persons_list_from_sort =
+                _personsService.GetSortedPersons(allPersons,nameof(Person.PersonName), SortOrderOptions.DESC);
+
+
+            //print persons_response_list_from_get
+            _testOutputHelper.WriteLine("Actual:");
+            foreach (PersonResponse person_response_from_get in persons_list_from_sort)
+            {
+                _testOutputHelper.WriteLine(person_response_from_get.ToString());
+            }
+            person_response_list_from_add = person_response_list_from_add.OrderByDescending(p => p.PersonName).ToList();
+
+            //Assert
+            for (int i = 0; i < person_response_list_from_add.Count; i++)
+            {
+                Assert.Equal(person_response_list_from_add[i], persons_list_from_sort[i]);
+            }
         }
         #endregion
     }
