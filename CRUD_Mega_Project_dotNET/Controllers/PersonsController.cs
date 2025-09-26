@@ -15,7 +15,7 @@ namespace CRUD_Mega_Project_dotNET.Controllers
         
         [Route("/persons/index")]
         [Route("/")]
-        public IActionResult Index(string? searchBy, string? searchString)
+        public IActionResult Index(string searchBy, string? searchString)
         {
             ViewBag.SearchFields = new Dictionary<string, string>
             {
@@ -26,8 +26,10 @@ namespace CRUD_Mega_Project_dotNET.Controllers
                 { nameof(PersonResponse.CountryID), "Country" },
                 { nameof(PersonResponse.Address), "Address" }
             };
-            
-            List<PersonResponse> persons=_personsService.GetAllPersons();
+
+            List<PersonResponse> persons = _personsService.GetFilteredPersons(searchBy, searchString);
+            ViewBag.CurrentSearchBy = searchBy;
+            ViewBag.CurrentSearchString = searchString;
             return View(persons);  //Views/Persons/Index.cshtml
         }
     }
