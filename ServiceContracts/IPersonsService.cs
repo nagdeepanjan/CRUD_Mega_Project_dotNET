@@ -55,5 +55,12 @@ namespace ServiceContracts
         /// <returns>Person response object after updation</returns>
         PersonResponse UpdatePerson(PersonUpdateRequest? personUpdateRequest);
 
+        /// <summary>
+        /// Deletes a person with given Person ID
+        /// </summary>
+        /// <param name="personID">PersonID to delete</param>
+        /// <returns>returns true if the deletion was successful; else false</returns>
+        bool DeletePerson(Guid? personID);
+
     }
 }

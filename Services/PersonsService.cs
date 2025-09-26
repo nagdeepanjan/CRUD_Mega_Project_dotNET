@@ -184,5 +184,18 @@ namespace Services
             //return ConvertPersonToPersonResponse(existingPerson);
             return existingPerson.ToPersonResponse();
         }
+
+        public bool DeletePerson(Guid? personID)
+        {
+            if(personID is null)
+                throw new ArgumentNullException(nameof(personID));
+
+            Person? person=_persons.FirstOrDefault(p => p.PersonID == personID);
+            if (person is null)
+                return false;
+
+            _persons.RemoveAll(p => p.PersonID == personID);
+            return true;
+        }
     }
 }

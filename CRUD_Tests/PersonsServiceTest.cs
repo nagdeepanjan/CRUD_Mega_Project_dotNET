@@ -1,4 +1,6 @@
-﻿using Entities;
+﻿using System.Diagnostics.Contracts;
+using System.Security.Cryptography.X509Certificates;
+using Entities;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
@@ -565,7 +567,68 @@ namespace CRUD_Tests
             Assert.Equal(person_response_from_get, person_response_from_update);
             
         }
+        #endregion
 
+        #region TEST DeletePerson()
+
+        //If you supply valid PersonID, it returns true
+        [Fact]
+        public void DeletePerson_ValidPersonID()
+        {
+            //Arrange
+            CountryAddRequest country_add_request = new CountryAddRequest { CountryName = "USA" };
+            CountryResponse country_response_from_add = _countriesService.AddCountry(country_add_request);
+
+            PersonAddRequest person_add_request = new PersonAddRequest
+            {
+                PersonName = "Mat",
+                CountryID = country_response_from_add.CountryID,
+                Gender = GenderOptions.Male,
+                DateOfBirth = DateTime.Parse("1999-12-12"),
+                Address = "Nayantara",
+                Email = "donotmail@yahoo.com",
+                ReceiveNewsLetters = true
+            };
+            PersonResponse person_response_from_add = _personsService.AddPerson(person_add_request);
+            
+
+            //Act
+            bool isDeleted = _personsService.DeletePerson(person_response_from_add.PersonID);
+
+            //Assert
+            Assert.True(isDeleted);
+
+        }
+
+
+        //If you supply invalid PersonID, it returns false
+        [Fact]
+        public void DeletePerson_InvalidPersonID()
+        {
+            //Arrange
+            CountryAddRequest country_add_request = new CountryAddRequest { CountryName = "USA" };
+            CountryResponse country_response_from_add = _countriesService.AddCountry(country_add_request);
+
+            PersonAddRequest person_add_request = new PersonAddRequest
+            {
+                PersonName = "Mat",
+                CountryID = country_response_from_add.CountryID,
+                Gender = GenderOptions.Male,
+                DateOfBirth = DateTime.Parse("1999-12-12"),
+                Address = "Nayantara",
+                Email = "donotmail@yahoo.com",
+                ReceiveNewsLetters = true
+            };
+            PersonResponse person_response_from_add = _personsService.AddPerson(person_add_request);
+
+
+            //Act
+            bool isDeleted = _personsService.DeletePerson(Guid.NewGuid());
+
+            //Assert
+            Assert.False(isDeleted);
+
+        }
 
         #endregion
     }
