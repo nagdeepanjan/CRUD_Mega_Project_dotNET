@@ -69,7 +69,7 @@ namespace Services
 
         public List<PersonResponse> GetAllPersons()
         {
-            return _persons.Select(p => p.ToPersonResponse()).ToList();
+            return _persons.Select(p => ConvertPersonToPersonResponse(p)).ToList();
         }
 
         public PersonResponse? GetPersonByPersonID(Guid? personID)
@@ -79,7 +79,7 @@ namespace Services
             Person? person = _persons.FirstOrDefault(p => p.PersonID == personID);
             if (person == null) return null;
 
-            return person.ToPersonResponse();
+            return ConvertPersonToPersonResponse(person);
         }
 
         private PersonResponse ConvertPersonToPersonResponse(Person person)
@@ -206,7 +206,7 @@ namespace Services
 
             // Return updated response
             //return ConvertPersonToPersonResponse(existingPerson);
-            return existingPerson.ToPersonResponse();
+            return ConvertPersonToPersonResponse(existingPerson);
         }
 
         public bool DeletePerson(Guid? personID)
