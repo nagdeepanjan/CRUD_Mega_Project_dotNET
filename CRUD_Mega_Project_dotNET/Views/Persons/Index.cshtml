@@ -30,14 +30,27 @@
 	<table class="table w-100 mt">
 		<thead>
 		<tr>
-			<th>Person Name</th>
-			<th>Email</th>
-			<th>Date of Birth</th>
-			<th>Age</th>
-			<th>Gender</th>
-			<th>Country</th>
-			<th>Address</th>
-			<th>Receive Newsletters</th>
+			@if (ViewBag.CurrentSortBy == nameof(PersonResponse.PersonName) && ViewBag.CurrentSortOrder == SortOrderOptions.ASC.ToString())
+			{
+					<th><a href="/persons/index?searchBy=@ViewBag.CurrentSearchBy&searchString=@ViewBag.CurrentSearchString&sortBy=@nameof(PersonResponse.PersonName)&sortOrder=DESC">Person Name</a> <i class="fa-solid fa-sort-up"></i></th>
+			}
+			else if (ViewBag.CurrentSortBy == nameof(PersonResponse.PersonName) && ViewBag.CurrentSortOrder == SortOrderOptions.DESC.ToString())
+			{
+					<th><a href="/persons/index?searchBy=@ViewBag.CurrentSearchBy&searchString=@ViewBag.CurrentSearchString&sortBy=@nameof(PersonResponse.PersonName)&sortOrder=ASC">Person Name</a> <i class="fa-solid fa-sort-down"></i></th>
+					
+			}
+			else
+			{
+					<th><a href="/persons/index?searchBy=@ViewBag.CurrentSearchBy&searchString=@ViewBag.CurrentSearchString&sortBy=@nameof(PersonResponse.PersonName)&sortOrder=DESC">Person Name</a></th>
+			}
+			
+			<th><a href="">Email</a></th>
+			<th><a href="">Date of Birth</a></th>
+			<th><a href="">Age</a></th>
+			<th><a href="">Gender</a></th>
+			<th><a href="">Country</a></th>
+			<th><a href="">Address</a></th>
+			<th><a href="">Receive Newsletters</a></th>
 		</tr>
 		</thead>
 		<tbody>
