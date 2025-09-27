@@ -8,10 +8,12 @@ namespace CRUD_Mega_Project_dotNET.Controllers
     public class PersonsController : Controller
     {
         private readonly IPersonsService _personsService;
+        private readonly ICountriesService _countriesService;
 
-        public PersonsController(IPersonsService personsService)
+        public PersonsController(IPersonsService personsService, ICountriesService countriesService)
         {
             _personsService = personsService;
+            _countriesService = countriesService;
         }
         
         [Route("/persons/index")]
@@ -39,6 +41,16 @@ namespace CRUD_Mega_Project_dotNET.Controllers
 
 
             return View(sortedPersons);  //Views/Persons/Index.cshtml
+        }
+
+
+        //Executes when the user clicks on "Create Person" hyperlink
+        [HttpGet("/persons/create")]
+        public IActionResult Create()
+        {
+            List<CountryResponse> countries=_countriesService.GetAllCountries();
+            ViewBag.Countries = countries;
+            return View();
         }
     }
 }
