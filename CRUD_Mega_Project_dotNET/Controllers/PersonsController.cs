@@ -52,7 +52,6 @@ namespace CRUD_Mega_Project_dotNET.Controllers
             List<CountryResponse> countries=_countriesService.GetAllCountries();
             ViewBag.Countries = countries.Select(c => new SelectListItem { Text = c.CountryName, Value = c.CountryID.ToString() }); //Used for the select dropdown of countries
 
-
             return View();
         }
 
@@ -63,7 +62,8 @@ namespace CRUD_Mega_Project_dotNET.Controllers
             if (!ModelState.IsValid)
             {
                 List<CountryResponse> countries = _countriesService.GetAllCountries();
-                ViewBag.Countries = countries;
+                ViewBag.Countries = countries.Select(c =>
+                    new SelectListItem() { Text = c.CountryName, Value = c.CountryID.ToString() });
 
                 ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 return View();
