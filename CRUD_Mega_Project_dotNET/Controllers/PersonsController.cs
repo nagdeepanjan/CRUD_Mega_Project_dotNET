@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
@@ -49,7 +50,9 @@ namespace CRUD_Mega_Project_dotNET.Controllers
         public IActionResult Create()
         {
             List<CountryResponse> countries=_countriesService.GetAllCountries();
-            ViewBag.Countries = countries;
+            ViewBag.Countries = countries.Select(c => new SelectListItem { Text = c.CountryName, Value = c.CountryID.ToString() }); //Used for the select dropdown of countries
+
+
             return View();
         }
 
