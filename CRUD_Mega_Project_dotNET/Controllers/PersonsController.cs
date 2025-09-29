@@ -112,8 +112,29 @@ namespace CRUD_Mega_Project_dotNET.Controllers
                     new SelectListItem() { Text = c.CountryName, Value = c.CountryID.ToString() });
 
                 ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return View();
+                return View(personResponse.ToPersonUpdateRequest());
             }
+        }
+
+        [HttpGet("/persons/[action]/{personID}")]
+        public IActionResult Delete(Guid? personID)
+        {
+            PersonResponse? personResponse = _personsService.GetPersonByPersonID(personID);
+            if (personResponse is null)
+                return RedirectToAction("Index");
+
+            return View(personResponse);
+        }
+
+        [HttpPost("/persons/[action]/{personID}")]
+        public IActionResult Delete(Guid personID)
+        {
+            PersonResponse personresponse=_personsService.GetPersonByPersonID(personID);
+            if(personresponse is null)
+                return RedirectToAction("Index");
+
+            _personsService.DeletePerson(personID);
+            return RedirectToAction("Index");
         }
     }
 }
